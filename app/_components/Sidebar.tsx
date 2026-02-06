@@ -1,65 +1,100 @@
 "use client";
 
-import { BadgeIndianRupee, HandCoinsIcon, HomeIcon, SidebarCloseIcon, SidebarOpenIcon, Zap } from "lucide-react";
+import { 
+  BadgeIndianRupee, 
+  HandCoinsIcon, 
+  HomeIcon, 
+  Zap, 
+  CreditCard, 
+  Users, 
+  User,
+  LucideIcon
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
+import { cn } from "@/lib/utils";
+
+interface NavItem {
+  id: number;
+  name: string;
+  icon: LucideIcon;
+  path: string;
+}
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
-  const sidebarItem = [
-    { id: 1, name: "Home", icon: <HomeIcon />, path: "/" },
-    { id: 2, name: "Insights", icon: <Zap />, path: "/dashboard" },
-    { id: 3, name: "Transaction", icon: <HandCoinsIcon />, path: "/mytransaction" },
+  const sidebarItems: NavItem[] = [
+    { id: 1, name: "Dashboard", icon: HomeIcon, path: "/dashboard" },
+    { id: 2, name: "Insights", icon: Zap, path: "/insights" },
+    { id: 3, name: "Transaction", icon: HandCoinsIcon, path: "/mytransaction" },
+    { id: 4, name: "Workspaces", icon: Users, path: "/workspaces" },
+    { id: 5, name: "Billing", icon: CreditCard, path: "/billing" },
+    { id: 6, name: "Settings", icon: User, path: "/settings" },
   ];
 
   return (
-    <>
-      <div
-        className={`h-full bg-gray-900 shadow-lg z-50 transition-all duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "-translate-x-full opacity-0"
-        }`}>
-        <div className="flex justify-between items-center p-4">
-          <BadgeIndianRupee
-            className="text-white"
-            size={40}
-          />
-          <SidebarCloseIcon
-            className=" text-white cursor-pointer sm:hidden"
-            size={20}
-            onClick={() => setIsOpen(!isOpen)}
-          />
+    <div className="h-full w-full p-4">
+      <div className="h-full glass-panel rounded-3xl flex flex-col overflow-hidden">
+        {/* Logo Section */}
+        <div className="p-8 flex items-center gap-3">
+          <div className="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+            <BadgeIndianRupee className="text-white" size={24} />
+          </div>
+          <span className="text-xl font-bold bg-linear-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
+            Finance
+          </span>
         </div>
-        <div className="mt-4">
-          {sidebarItem.map((item) => {
+
+        {/* Navigation Items */}
+        <nav className="flex-1 px-4 space-y-2">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-semibold px-4 mb-4">
+            Main Menu
+          </div>
+          {sidebarItems.map((item) => {
+            const isActive = pathname === item.path;
+            const Icon = item.icon;
+            
             return (
-              <div key={item.id}>
-                <div
-                  className={`${
-                    pathname === item.path ? "bg-gray-700" : "bg-gray-900 hover:bg-gray-700"
-                  } flex items-center p-4 cursor-pointer mx-2 my-4 rounded-xl`}
-                  onClick={() => router.push(item.path)}>
-                  <div className={`${pathname === item.path ? "text-white" : "text-gray-500"} mr-4`}>{item.icon}</div>
-                  <div className={`${pathname === item.path ? "text-white" : "text-gray-500"}`}>{item.name}</div>
-                </div>
-              </div>
+              <button
+                key={item.id}
+                onClick={() => router.push(item.path)}
+                className={cn(
+                  "w-full group flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300",
+                  isActive 
+                    ? "bg-primary/10 text-primary shadow-sm" 
+                    : "text-muted-foreground hover:bg-primary/5 hover:text-primary"
+                )}
+              >
+                <Icon 
+                  size={20} 
+                  className={cn(
+                    "transition-transform duration-300 group-hover:scale-110",
+                    isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
+                  )} 
+                />
+                <span className="font-medium text-sm">{item.name}</span>
+                {isActive && (
+                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
+                )}
+              </button>
             );
           })}
+        </nav>
+
+        {/* Footer info or upgrade card */}
+        <div className="p-4">
+          <div className="bg-primary/5 rounded-2xl p-4 border border-primary/10">
+            <p className="text-xs text-muted-foreground mb-2">Current Plan</p>
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-foreground">Pro Plan</span>
+              <Zap size={14} className="text-accent" />
+            </div>
+          </div>
         </div>
       </div>
-
-      <div
-        className={`${isOpen ? "hidden" : "block fixed top-0 left-0 bg-opacity-50"}  `}
-        onClick={() => setIsOpen(true)}>
-        <SidebarOpenIcon
-          className="cursor-pointer"
-          size={20}
-          onClick={() => setIsOpen(!isOpen)}
-        />
-      </div>
-    </>
+    </div>
   );
 };
 
