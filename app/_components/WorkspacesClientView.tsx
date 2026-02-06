@@ -9,6 +9,7 @@ import { createWorkspace, deleteWorkspace } from "@/app/actions/workspaces";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ConfirmModal } from "@/components/modals/ConfirmModal";
 
 interface Workspace {
   id: string;
@@ -31,6 +32,7 @@ export default function WorkspacesClientView({ workspaces, currentUserId }: Work
   const [newWorkspaceName, setNewWorkspaceName] = useState("");
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,11 +54,16 @@ export default function WorkspacesClientView({ workspaces, currentUserId }: Work
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure? This will delete the workspace and all its data.")) return;
-    setDeletingId(id);
+  const confirmDelete = (id: string) => {
+      setDeletingId(id);
+      setIsConfirmOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!deletingId) return;
+    
     try {
-        const result = await deleteWorkspace(id);
+        const result = await deleteWorkspace(deletingId);
         if (result.success) {
           toast.success("Workspace deleted");
           router.refresh();
@@ -67,11 +74,20 @@ export default function WorkspacesClientView({ workspaces, currentUserId }: Work
         toast.error("Error deleting workspace");
     } finally {
         setDeletingId(null);
+        setIsConfirmOpen(false);
     }
   };
 
   return (
     <div className="space-y-8">
+      <ConfirmModal 
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={handleDelete}
+        title="Delete Workspace"
+        description="Are you sure you want to delete this workspace and all its data? This action cannot be undone."
+        loading={!!deletingId}
+      />
       <div className="flex items-center justify-between">
         <div>
             <h1 className="text-3xl font-bold">Workspaces</h1>
@@ -80,8 +96,9 @@ export default function WorkspacesClientView({ workspaces, currentUserId }: Work
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="premium-gradient text-white rounded-xl shadow-lg shadow-primary/20">
-              <Plus size={18} className="mr-2" /> Create Workspace
+            <Button className="bg-primary hover:bg-primary/90 text-white rounded-md shadow-sm">
+              <Plus size={16} className="mr-2" />
+              Create Workspace
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-md rounded-2xl">
@@ -98,7 +115,7 @@ export default function WorkspacesClientView({ workspaces, currentUserId }: Work
                         required
                     />
                 </div>
-                <Button type="submit" className="w-full premium-gradient text-white" disabled={loading}>
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white" disabled={loading}>
                     {loading ? "Creating..." : "Create Workspace"}
                 </Button>
             </form>
@@ -108,7 +125,7 @@ export default function WorkspacesClientView({ workspaces, currentUserId }: Work
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {workspaces.map((ws) => (
-            <div key={ws.id} className="glass-panel p-6 rounded-3xl relative group hover:border-primary/30 transition-all flex flex-col justify-between h-[220px]">
+            <div key={ws.id} className="card-classic p-6 rounded-xl relative group hover:shadow-md transition-all flex flex-col justify-between h-[220px]">
                 <div>
                      <div className="flex justify-between items-start mb-4">
                         <div className="p-3 bg-secondary rounded-2xl">
@@ -119,7 +136,7 @@ export default function WorkspacesClientView({ workspaces, currentUserId }: Work
                                 variant="ghost" 
                                 size="icon" 
                                 className="text-muted-foreground hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                                onClick={() => handleDelete(ws.id)}
+                                onClick={() => confirmDelete(ws.id)}
                                 disabled={deletingId === ws.id}
                              >
                                 <Trash2 size={18} />

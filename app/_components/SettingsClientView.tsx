@@ -58,7 +58,7 @@ export default function SettingsClientView({ user }: SettingsClientViewProps) {
         </TabsList>
 
         <TabsContent value="profile" className="space-y-6">
-          <Card className="glass-panel">
+          <Card className="card-classic shadow-sm">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="w-5 h-5" />
@@ -84,7 +84,7 @@ export default function SettingsClientView({ user }: SettingsClientViewProps) {
                   Email cannot be changed contact support if needed.
                 </p>
               </div>
-              <Button onClick={handleSaveProfile} disabled={loading || !name.trim()} className="premium-gradient text-white">
+              <Button onClick={handleSaveProfile} disabled={loading || !name.trim()} className="bg-primary hover:bg-primary/90 text-white">
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Save Changes
               </Button>
@@ -93,7 +93,7 @@ export default function SettingsClientView({ user }: SettingsClientViewProps) {
         </TabsContent>
 
         <TabsContent value="billing" className="space-y-6">
-          <Card className="glass-panel">
+          <Card className="card-classic shadow-sm">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CreditCard className="w-5 h-5" />
@@ -116,7 +116,7 @@ export default function SettingsClientView({ user }: SettingsClientViewProps) {
 
         {/* Placeholders for other tabs */}
         <TabsContent value="notifications" className="space-y-6">
-           <Card className="glass-panel">
+           <Card className="card-classic shadow-sm">
              <CardHeader><CardTitle>Notifications</CardTitle></CardHeader>
              <CardContent className="text-muted-foreground text-sm">
                 Notification preferences are coming soon.
@@ -125,7 +125,7 @@ export default function SettingsClientView({ user }: SettingsClientViewProps) {
         </TabsContent>
 
         <TabsContent value="security" className="space-y-6">
-           <Card className="glass-panel">
+           <Card className="card-classic shadow-sm">
              <CardHeader><CardTitle>Security</CardTitle></CardHeader>
              <CardContent className="text-muted-foreground text-sm">
                 Security settings are managed by your authentication provider.

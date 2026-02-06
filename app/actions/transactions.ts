@@ -71,6 +71,7 @@ export async function addTransaction(data: {
       category: data.category,
       date: data.date,
       userId: userId,
+      updatedAt: new Date(),
     }).returning();
 
     return { success: true, transaction: newTransaction };

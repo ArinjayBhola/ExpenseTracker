@@ -14,7 +14,7 @@ export default function AuthLayout({
         {/* Header */}
         <header className="absolute top-0 left-0 right-0 p-8 flex items-center justify-between z-10 w-full max-w-7xl mx-auto">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 premium-gradient rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center shadow-lg shadow-primary/20">
               <FaRupeeSign className="text-white" size={20} />
             </div>
           </Link>

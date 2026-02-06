@@ -6,31 +6,40 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.99 0.005 260);
-  --foreground: oklch(0.2 0.02 260);
-  --card: oklch(1 0 0 / 0.7);
-  --card-foreground: oklch(0.2 0.02 260);
+  /* Visa-inspired Corporate Palette */
+  --background: oklch(0.98 0.002 240); /* Soft Off-White */
+  --foreground: oklch(0.15 0.02 240); /* Deep Navy/Black */
+  
+  --card: oklch(1 0 0); /* Pure White */
+  --card-foreground: oklch(0.15 0.02 240);
+  
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.02 260);
-  --primary: oklch(0.55 0.18 260);
+  --popover-foreground: oklch(0.15 0.02 240);
+  
+  --primary: oklch(0.35 0.15 265); /* Visa Blue / Deep Corporate Blue */
   --primary-foreground: oklch(0.99 0.01 260);
-  --secondary: oklch(0.92 0.02 260);
-  --secondary-foreground: oklch(0.2 0.02 260);
-  --muted: oklch(0.95 0.01 260);
-  --muted-foreground: oklch(0.5 0.02 260);
-  --accent: oklch(0.92 0.05 280);
-  --accent-foreground: oklch(0.55 0.18 260);
+  
+  --secondary: oklch(0.96 0.01 240); /* Very Light Gray for backgrounds */
+  --secondary-foreground: oklch(0.35 0.15 265);
+  
+  --muted: oklch(0.96 0.01 240);
+  --muted-foreground: oklch(0.45 0.02 240); /* Medium Gray */
+  
+  --accent: oklch(0.90 0.05 260); /* Soft Blue Accent */
+  --accent-foreground: oklch(0.35 0.15 265);
+  
   --destructive: oklch(0.6 0.18 25);
   --destructive-foreground: oklch(0.99 0.01 260);
-  --border: oklch(0.9 0.02 260);
-  --input: oklch(0.95 0.01 260);
-  --ring: oklch(0.55 0.18 260 / 0.3);
-  --radius: 1.25rem;
+  
+  --border: oklch(0.88 0.02 240); /* Light Gray Border */
+  --input: oklch(0.92 0.01 240);
+  --ring: oklch(0.35 0.15 265 / 0.3);
+  
+  --radius: 0.5rem; /* Standard Radius (8px) */
 
-  /* Premium Accents */
-  --income: oklch(0.65 0.15 150);
-  --expense: oklch(0.6 0.18 25);
-  --glow: oklch(0.55 0.18 260 / 0.1);
+  /* Semantic Colors */
+  --income: oklch(0.55 0.15 145); /* Professional Green */
+  --expense: oklch(0.6 0.18 25);  /* Professional Red */
 }
 
 @theme inline {
@@ -40,13 +49,22 @@
   --color-card-foreground: var(--card-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
+  --color-input: var(--input);
   --color-ring: var(--ring);
   --color-income: var(--income);
   --color-expense: var(--expense);
-  --radius-xl: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 }
 
 @layer base {
@@ -55,29 +73,35 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased min-h-screen;
-    background-image:
-      radial-gradient(at 0% 0%, oklch(0.95 0.05 260 / 0.4) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, oklch(0.95 0.05 190 / 0.3) 0px, transparent 50%);
+    @apply bg-background text-foreground antialiased min-h-screen font-sans;
   }
 }
 
 @layer components {
-  .glass-panel {
-    @apply bg-white/40 backdrop-blur-2xl border border-white/60;
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+  /* Corporate Card Style - Replaces Glassmorphism */
+  .card-classic {
+    @apply bg-card border border-border rounded-lg shadow-sm;
+  }
+  
+  /* Clean Table Styles */
+  .table-clean {
+    @apply w-full text-sm text-left;
+  }
+  .table-clean th {
+    @apply font-semibold text-muted-foreground border-b border-border pb-3 pl-4;
+  }
+  .table-clean td {
+    @apply py-4 pl-4 border-b border-border/50 text-foreground;
+  }
+  .table-clean tr:last-child td {
+    @apply border-0;
   }
 
-  .premium-gradient {
-    @apply bg-linear-to-br from-primary via-primary/90 to-primary/70;
+  /* Status Badges */
+  .badge-success {
+    @apply bg-green-50 text-green-700 px-2 py-1 rounded-md text-xs font-medium border border-green-100;
   }
-
-  .glow-hover {
-    @apply transition-all duration-500;
-  }
-
-  .glow-hover:hover {
-    @apply -translate-y-1;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  .badge-danger {
+    @apply bg-red-50 text-red-700 px-2 py-1 rounded-md text-xs font-medium border border-red-100;
   }
 }

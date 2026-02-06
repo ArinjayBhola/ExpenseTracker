@@ -131,7 +131,7 @@ function TransactionForm({ onSuccess }: TransactionFormProps) {
                 <SelectTrigger>
                     <SelectValue placeholder="Select category" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="!z-[9999] bg-card border border-border shadow-2xl">
                     {CATEGORIES.map(cat => (
                         <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                     ))}
@@ -154,7 +154,7 @@ function TransactionForm({ onSuccess }: TransactionFormProps) {
         </div>
       </div>
 
-      <Button type="submit" className="w-full premium-gradient text-white" disabled={loading}>
+      <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white h-11" disabled={loading}>
         {loading ? <Loader2 className="animate-spin mr-2" size={16} /> : null}
         Add Transaction
       </Button>

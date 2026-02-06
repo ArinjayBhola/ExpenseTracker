@@ -1,7 +1,8 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
-import { Bell, LogOut, Search, User as UserIcon, Settings as SettingsIcon } from "lucide-react";
+import { LogOut, User as UserIcon, Settings as SettingsIcon, Bell } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,78 +13,75 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 
 const Header = () => {
   const { data: session, status } = useSession();
 
   return (
-    <div className="flex justify-between items-center p-8">
-      {/* Search Bar or Breadcrumb Area */}
-      <div className="flex-1 max-w-md">
-        <div className="relative group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={18} />
-          <input 
-            type="text" 
-            placeholder="Search transactions..." 
-            className="w-full bg-secondary border border-border/50 rounded-2xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-primary/50 transition-all placeholder:text-muted-foreground"
-          />
-        </div>
-      </div>
+    <header className="flex justify-between items-center px-8 h-16 sticky top-0 z-50 bg-card border-b border-border shadow-sm">
+      {/* Breadcrumbs or Page Title could go here */}
+      <div className="flex-1" />
       
       <div className="flex items-center gap-4">
-        <button className="relative p-2.5 rounded-xl bg-secondary hover:bg-muted text-muted-foreground hover:text-foreground transition-all">
-          <Bell size={20} />
-          <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-accent rounded-full border-2 border-background" />
-        </button>
+        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
+            <Bell size={20} />
+        </Button>
         
+        <div className="w-px h-6 bg-border mx-2" />
+
         {status === "loading" ? (
-          <div className="h-12 w-12 rounded-2xl bg-secondary animate-pulse" />
+          <div className="h-9 w-9 rounded-full bg-secondary animate-pulse" />
         ) : session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-12 w-12 rounded-2xl overflow-hidden hover:opacity-80 transition-opacity p-0 border border-border/50">
-                <div className="w-full h-full bg-linear-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                  <UserIcon className="h-6 w-6 text-primary" />
-                </div>
+              <Button variant="ghost" className="relative h-9 w-9 rounded-full overflow-hidden hover:opacity-80 transition-opacity p-0 border border-border">
+                 <div className="w-full h-full bg-secondary flex items-center justify-center">
+                    <span className="text-sm font-semibold text-primary">
+                        {session.user?.name?.charAt(0) || "U"}
+                    </span>
+                 </div>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-64 glass-panel rounded-2xl border-white/60 text-foreground mt-2 p-2" align="end">
-              <DropdownMenuLabel className="font-normal p-4">
+            <DropdownMenuContent className="w-56 bg-card border-border shadow-lg rounded-md mt-2" align="end">
+              <DropdownMenuLabel className="font-normal p-3">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-semibold leading-none">{session.user?.name}</p>
+                  <p className="text-sm font-medium leading-none text-foreground">{session.user?.name}</p>
                   <p className="text-xs leading-none text-muted-foreground">{session.user?.email}</p>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-border/50 mx-2" />
-              <DropdownMenuItem className="cursor-pointer rounded-xl p-3 hover:bg-primary/5 focus:bg-primary/5 transition-colors gap-3">
-                <UserIcon size={16} className="text-muted-foreground" />
-                <span>Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer rounded-xl p-3 hover:bg-primary/5 focus:bg-primary/5 transition-colors gap-3">
-                <SettingsIcon size={16} className="text-muted-foreground" />
-                <span>Account Settings</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-border/50 mx-2" />
+              <DropdownMenuSeparator className="bg-border" />
+              <Link href="/settings" passHref>
+                <DropdownMenuItem className="cursor-pointer p-2.5 focus:bg-secondary text-sm">
+                    <UserIcon size={16} className="text-muted-foreground mr-2" />
+                    <span>Profile</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/settings" passHref>
+                <DropdownMenuItem className="cursor-pointer p-2.5 focus:bg-secondary text-sm">
+                    <SettingsIcon size={16} className="text-muted-foreground mr-2" />
+                    <span>Settings</span>
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuSeparator className="bg-border" />
               <DropdownMenuItem 
-                className="cursor-pointer rounded-xl p-3 text-red-400 hover:bg-red-400/10 focus:bg-red-400/10 transition-colors gap-3"
+                className="cursor-pointer p-2.5 text-destructive focus:bg-destructive/10 text-sm"
                 onClick={() => signOut({ callbackUrl: "/signin" })}
               >
-                <LogOut size={16} />
+                <LogOut size={16} className="mr-2" />
                 <span>Log out</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
           <Button 
-            className="premium-gradient text-white rounded-2xl px-6 h-11 border-none shadow-lg shadow-primary/20"
+            className="bg-primary hover:bg-primary/90 text-white rounded-md px-4 h-9 shadow-sm text-sm font-medium"
             onClick={() => window.location.href = "/signin"}
           >
             Sign In
           </Button>
         )}
       </div>
-    </div>
+    </header>
   );
 };
 

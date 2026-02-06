@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "./_components/Sidebar";
 import Header from "./_components/Header";
@@ -7,15 +7,7 @@ import SessionWrapper from "@/components/SessionWrapper";
 import NextAuthProvider from "@/components/NextAuthProvider";
 import NextTopLoader from "nextjs-toploader";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -24,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased selection:bg-primary/20 selection:text-primary`}>
+      <body className={`${inter.className} antialiased selection:bg-primary selection:text-primary-foreground bg-background text-foreground`}>
         <NextTopLoader color="var(--primary)" showSpinner={false} zIndex={99999} />
         <NextAuthProvider>
           <SessionWrapper>
@@ -35,3 +27,4 @@ export default function RootLayout({
     </html>
   );
 }
+

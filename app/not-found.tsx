@@ -13,7 +13,7 @@ export default function NotFound() {
           <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent/5 blur-[100px] rounded-full" />
       </div>
 
-      <div className="glass-panel p-12 rounded-[2.5rem] text-center max-w-md w-full relative z-10 animate-in fade-in zoom-in-95 duration-500 shadow-2xl border-white/60">
+      <div className="card-classic p-12 rounded-2xl text-center max-w-md w-full relative z-10 animate-in fade-in zoom-in-95 duration-500 shadow-xl border-border">
         <div className="w-20 h-20 bg-red-50 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-inner">
            <FaTriangleExclamation className="text-red-500 text-4xl" />
         </div>
@@ -25,7 +25,7 @@ export default function NotFound() {
         </p>
 
         <Link href="/dashboard">
-          <Button className="w-full h-14 rounded-2xl premium-gradient text-white text-base font-bold shadow-xl shadow-primary/25 hover:scale-[1.02] active:scale-[0.98] transition-all">
+          <Button className="w-full h-12 rounded-lg bg-primary hover:bg-primary/90 text-white text-base font-medium shadow-md transition-all">
              <FaHouse className="mr-2" />
              Return to Dashboard
           </Button>

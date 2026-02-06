@@ -8,10 +8,13 @@ import {
   CreditCard, 
   Users, 
   User,
-  LucideIcon
+  LucideIcon,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import React from "react";
+import { usePathname } from "next/navigation";
+import React, { useState } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
@@ -22,8 +25,8 @@ interface NavItem {
 }
 
 const Sidebar = () => {
-  const router = useRouter();
   const pathname = usePathname();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const sidebarItems: NavItem[] = [
     { id: 1, name: "Dashboard", icon: HomeIcon, path: "/dashboard" },
@@ -35,67 +38,95 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="h-full w-full p-4">
-      <div className="h-full glass-panel rounded-3xl flex flex-col overflow-hidden">
-        {/* Logo Section */}
-        <div className="p-8 flex items-center gap-3">
-          <div className="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-            <BadgeIndianRupee className="text-white" size={24} />
-          </div>
-          <span className="text-xl font-bold bg-linear-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
-            Finance
-          </span>
-        </div>
+    <div 
+      className={cn(
+        "h-full relative transition-[width] duration-300 ease-in-out flex flex-col bg-card border-r border-border overflow-visible",
+        isCollapsed ? "w-[72px]" : "w-64" 
+      )}
+    >
+      {/* Toggle Button */}
+      <button 
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className="absolute right-4 translate-x-1/2 top-6 z-100 bg-card border border-border shadow-md rounded-full p-1.5 text-muted-foreground hover:text-primary transition-colors flex items-center justify-center outline-none ring-0"
+      >
+        {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+      </button>
 
-        {/* Navigation Items */}
-        <nav className="flex-1 px-4 space-y-2">
-          <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-semibold px-4 mb-4">
-            Main Menu
-          </div>
-          {sidebarItems.map((item) => {
-            const isActive = pathname === item.path;
-            const Icon = item.icon;
-            
-            return (
-              <button
-                key={item.id}
-                onClick={() => router.push(item.path)}
-                className={cn(
-                  "w-full group flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300",
+      {/* Logo Section */}
+      <div className={cn("flex items-center gap-3 h-16 border-b border-border/50 transition-all duration-300", isCollapsed ? "justify-center px-0" : "px-6")}>
+        <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center shrink-0">
+          <BadgeIndianRupee className="text-white" size={20} />
+        </div>
+        <span className={cn(
+          "text-lg font-bold text-foreground whitespace-nowrap overflow-hidden transition-all duration-300",
+          isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
+        )}>
+          Finance Tracker
+        </span>
+      </div>
+
+      {/* Navigation Items */}
+      <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+        <div className={cn(
+          "text-xs uppercase tracking-wider text-muted-foreground font-semibold px-3 mb-2 transition-opacity duration-300",
+          isCollapsed ? "opacity-0 h-0 overflow-hidden" : "opacity-100"
+        )}>
+          Menu
+        </div>
+        
+        {sidebarItems.map((item) => {
+          const isActive = pathname === item.path;
+          const Icon = item.icon;
+          
+          return (
+            <Link 
+              href={item.path}
+              key={item.id}
+              className={cn(
+                  "group flex items-center rounded-md transition-all duration-200",
+                  isCollapsed ? "justify-center p-2.5" : "gap-3 px-3 py-2.5",
                   isActive 
-                    ? "bg-primary/10 text-primary shadow-sm" 
-                    : "text-muted-foreground hover:bg-primary/5 hover:text-primary"
-                )}
-              >
-                <Icon 
-                  size={20} 
-                  className={cn(
-                    "transition-transform duration-300 group-hover:scale-110",
-                    isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
-                  )} 
-                />
-                <span className="font-medium text-sm">{item.name}</span>
-                {isActive && (
-                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
-                )}
-              </button>
-            );
-          })}
-        </nav>
+                    ? "bg-primary/10 text-primary font-medium" 
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+              )}
+              title={isCollapsed ? item.name : undefined}
+            >
+              <Icon 
+                size={20} 
+                className={cn(
+                  "shrink-0",
+                  isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+                )} 
+              />
+              <span className={cn(
+                "text-sm whitespace-nowrap overflow-hidden transition-all duration-300",
+                isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
+              )}>
+                {item.name}
+              </span>
+            </Link>
+          );
+        })}
+      </nav>
 
-        {/* Footer info or upgrade card */}
-        <div className="p-4">
-          <div className="bg-primary/5 rounded-2xl p-4 border border-primary/10">
-            <p className="text-xs text-muted-foreground mb-2">Current Plan</p>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-foreground">Pro Plan</span>
-              <Zap size={14} className="text-accent" />
+      {/* Footer Info */}
+      <div className="p-4 border-t border-border/50">
+         <div className={cn(
+            "flex items-center gap-3 transition-opacity duration-300",
+            isCollapsed ? "opacity-0 invisible" : "opacity-100 visible"
+         )}>
+            <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-muted-foreground">
+               <User size={16} />
             </div>
-          </div>
-        </div>
+            <div className="flex-1 overflow-hidden">
+               <p className="text-xs font-medium text-foreground truncate">Enterprise Plan</p>
+               <p className="text-[10px] text-muted-foreground truncate">Visa Corp.</p>
+            </div>
+         </div>
       </div>
     </div>
   );
 };
 
 export default Sidebar;
+

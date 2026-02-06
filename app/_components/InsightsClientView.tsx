@@ -105,7 +105,7 @@ export default function InsightsClientView({ transactions }: InsightsClientViewP
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Income vs Expense Pie */}
-        <div className="glass-panel p-6 rounded-3xl">
+        <div className="card-classic p-6 rounded-xl">
           <h3 className="text-lg font-bold mb-6">Income vs Expense</h3>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -130,7 +130,7 @@ export default function InsightsClientView({ transactions }: InsightsClientViewP
         </div>
 
         {/* Category Breakdown Bar */}
-        <div className="glass-panel p-6 rounded-3xl">
+        <div className="card-classic p-6 rounded-xl">
           <h3 className="text-lg font-bold mb-6">Expense Categories</h3>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -150,7 +150,7 @@ export default function InsightsClientView({ transactions }: InsightsClientViewP
         </div>
 
         {/* Trend Line/Bar */}
-        <div className="md:col-span-2 glass-panel p-6 rounded-3xl">
+        <div className="md:col-span-2 card-classic p-6 rounded-xl">
           <h3 className="text-lg font-bold mb-6">Transaction History</h3>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">

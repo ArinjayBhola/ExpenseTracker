@@ -84,7 +84,7 @@ export function UserGuide() {
                 </div>
 
                 <DialogFooter>
-                    <Button onClick={handleNext} className="w-full premium-gradient text-white">
+                    <Button onClick={handleNext} className="w-full bg-primary hover:bg-primary/90 text-white">
                         {step === steps.length - 1 ? (
                             <>Get Started <Check size={16} className="ml-2" /></>
                         ) : (
